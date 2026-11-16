@@ -1,12 +1,17 @@
 <script lang="ts">
 /**
+<<<<<<< HEAD
  * 番剧页主体（有机体）：页头 + 状态筛选 chips + 实时搜索 + 双布局（grid/list）+ 加载更多。
+=======
+ * 番剧页主体（有机体）：页头 + 状态筛选 chips + 实时搜索 + 双布局（grid/list）+ 分页。
+>>>>>>> upstream/main
  * 数据由页面层经 utils/anime-data.getAnimeList() 构建期取得后以 props 传入；
  * 筛选状态与搜索同步 URL（?status= / ?q=），与友链/动态/相册页同一交互语言。
  *
  * 布局形态：番剧页独立偏好（localStorage `shirone:anime-layout-mode`，默认 grid 海报网格），
  * 不与博客文章列表偏好耦合；工具栏提供快速切换按钮，切类后逐卡 FLIP 平移。
  */
+<<<<<<< HEAD
 import Button from "@components/atoms/action/Button.svelte";
 import Chips from "@components/atoms/action/Chips.svelte";
 import Card from "@components/atoms/display/Card.svelte";
@@ -19,6 +24,21 @@ import { i18n } from "@i18n/translation";
 import Icon from "@iconify/svelte";
 import { ANIME_STATUS_META } from "@utils/anime/status";
 import { flipFromRect } from "@utils/motion";
+=======
+import Chips from "@components/atoms/action/Chips.svelte";
+import Card from "@components/atoms/display/Card.svelte";
+import Icon from "@components/atoms/display/Icon.svelte";
+import TextField from "@components/atoms/input/TextField.svelte";
+import AnimeCard from "@components/molecules/AnimeCard.svelte";
+import ListPagination from "@components/molecules/ListPagination.svelte";
+import PageHeader from "@components/molecules/PageHeader.svelte";
+import I18nKey from "@i18n/i18nKey";
+import { i18n } from "@i18n/translation";
+import { ANIME_STATUS_META } from "@utils/anime/status";
+import { createListHistory } from "@utils/list-history";
+import { flipFromRect } from "@utils/motion";
+import { normalizePage, normalizePageSize } from "@utils/pagination";
+>>>>>>> upstream/main
 import { onMount } from "svelte";
 import type { AnimeItem } from "../../data/anime";
 
@@ -28,23 +48,39 @@ let {
 	animes = [] as AnimeItem[],
 	title = i18n(I18nKey.anime),
 	subtitle = i18n(I18nKey.animeBanner),
+<<<<<<< HEAD
+=======
+	pageSize = 12,
+>>>>>>> upstream/main
 }: {
 	animes?: AnimeItem[];
 	title?: string;
 	subtitle?: string;
+<<<<<<< HEAD
 } = $props();
 
 const ANIME_PAGE_SIZE = 12;
+=======
+	pageSize?: number;
+} = $props();
+
+>>>>>>> upstream/main
 const ANIME_LAYOUT_KEY = "shirone:anime-layout-mode";
 
 let query = $state("");
 let selectedStatus = $state("");
+<<<<<<< HEAD
 let shownCount = $state(ANIME_PAGE_SIZE);
 let initialized = false;
 /** 状态筛选过渡三段态：loading 展示指示器 → out 指示器淡出 → idle 列表 stagger 揭幕 */
 type FilterPhase = "idle" | "loading" | "out";
 let phase = $state<FilterPhase>("idle");
 let phaseTimers: ReturnType<typeof setTimeout>[] = [];
+=======
+let page = $state(1);
+let mounted = $state(false);
+let toolsEl = $state<HTMLElement | null>(null);
+>>>>>>> upstream/main
 
 /** 布局形态：番剧页专属独立偏好，默认海报网格 (grid) */
 let listMode = $state<AnimeLayoutMode>("grid");
@@ -79,13 +115,23 @@ const filtered = $derived.by(() => {
 	});
 });
 
+<<<<<<< HEAD
 const visibleAnimes = $derived(filtered.slice(0, shownCount));
 const hasMore = $derived(filtered.length > shownCount);
+=======
+const size = $derived(normalizePageSize(pageSize));
+const totalPages = $derived(Math.ceil(filtered.length / size));
+const currentPage = $derived(normalizePage(page, totalPages));
+const visibleItems = $derived(
+	filtered.slice((currentPage - 1) * size, currentPage * size),
+);
+>>>>>>> upstream/main
 
 function countLabel(count: number) {
 	return `${count} ${i18n(I18nKey.animeCounts)}`;
 }
 
+<<<<<<< HEAD
 /** 状态筛选：指示器展示 → 淡出 → 网格 stagger 揭幕 */
 function onStatusChange() {
 	phaseTimers.forEach(clearTimeout);
@@ -94,6 +140,38 @@ function onStatusChange() {
 		setTimeout(() => (phase = "out"), 300),
 		setTimeout(() => (phase = "idle"), 300 + 150),
 	];
+=======
+const listHistory = createListHistory({
+	read: (params) => {
+		query = params.get("q") || "";
+		selectedStatus = params.get("status") || "";
+		page = normalizePage(params.get("page"), totalPages);
+	},
+	write: (params) => {
+		for (const key of ["q", "status", "page"]) params.delete(key);
+		if (query.trim()) params.set("q", query.trim());
+		if (selectedStatus) params.set("status", selectedStatus);
+		if (currentPage > 1) params.set("page", String(currentPage));
+	},
+	element: () => toolsEl,
+});
+function setQuery(value: string) {
+	query = value;
+	page = 1;
+	listHistory.replace();
+}
+function setFilter(value: string) {
+	selectedStatus = value;
+	page = 1;
+	listHistory.replace();
+}
+function changePage(value: number) {
+	const next = normalizePage(value, totalPages);
+	if (next === currentPage) return;
+	page = next;
+	listHistory.push();
+	listHistory.scroll();
+>>>>>>> upstream/main
 }
 
 function readStoredLayoutMode(): AnimeLayoutMode {
@@ -126,6 +204,7 @@ function switchLayoutMode(mode: AnimeLayoutMode) {
 	});
 }
 
+<<<<<<< HEAD
 // 筛选/搜索变化时重置已加载数
 $effect(() => {
 	const s = selectedStatus;
@@ -161,6 +240,14 @@ onMount(() => {
 	return () => {
 		phaseTimers.forEach(clearTimeout);
 	};
+=======
+onMount(() => {
+	mounted = true;
+	listMode = readStoredLayoutMode();
+	const disconnect = listHistory.connect();
+	listHistory.replace();
+	return disconnect;
+>>>>>>> upstream/main
 });
 </script>
 
@@ -172,12 +259,20 @@ onMount(() => {
 	/>
 
 	{#if animes.length > 0}
+<<<<<<< HEAD
 		<div class="anime-section__tools">
+=======
+		<div class="anime-section__tools" bind:this={toolsEl} tabindex="-1">
+>>>>>>> upstream/main
 			<div class="anime-section__search-row">
 				<div class="anime-section__search">
 					<TextField
 						type="search"
+<<<<<<< HEAD
 						bind:value={query}
+=======
+						bind:value={() => query, setQuery}
+>>>>>>> upstream/main
 						placeholder={i18n(I18nKey.search)}
 						label={i18n(I18nKey.search)}
 						hideLabel
@@ -191,7 +286,11 @@ onMount(() => {
 							type="button"
 							class="anime-section__search-clear"
 							aria-label={i18n(I18nKey.clear)}
+<<<<<<< HEAD
 							onclick={() => (query = "")}
+=======
+							onclick={() => setQuery("")}
+>>>>>>> upstream/main
 						>
 							<Icon icon="material-symbols:close-rounded" aria-hidden="true" />
 						</button>
@@ -230,8 +329,12 @@ onMount(() => {
 						<Chips
 							items={statusItems}
 							variant="filter"
+<<<<<<< HEAD
 							bind:value={selectedStatus}
 							onchange={onStatusChange}
+=======
+							bind:value={() => selectedStatus, setFilter}
+>>>>>>> upstream/main
 						/>
 					</div>
 				{/if}
@@ -243,6 +346,7 @@ onMount(() => {
 		</div>
 	{/if}
 
+<<<<<<< HEAD
 	{#if phase !== "idle"}
 		<!-- 状态筛选过渡：contained 指示器展示后淡出，再由网格 stagger 揭幕 -->
 		<div
@@ -268,6 +372,24 @@ onMount(() => {
 					onclick={() => (shownCount += ANIME_PAGE_SIZE)}
 				/>
 			</div>
+=======
+	{#if visibleItems.length > 0}
+		{#key JSON.stringify([query, selectedStatus, currentPage])}
+			<div class="anime-list {LIST_MODE_CLASS[listMode]}" bind:this={listEl}>
+				{#each visibleItems as anime, i (anime.title)}
+					<AnimeCard {anime} delay={Math.min(i, 3) * 25} />
+				{/each}
+			</div>
+		{/key}
+		{#if !mounted && filtered.length > size}
+			<noscript>
+				<div class="anime-list anime-list--grid">
+					{#each filtered.slice(size) as anime (anime.title)}
+						<AnimeCard {anime} />
+					{/each}
+				</div>
+			</noscript>
+>>>>>>> upstream/main
 		{/if}
 	{:else}
 		<div class="anime-section__empty">
@@ -280,6 +402,14 @@ onMount(() => {
 			{/if}
 		</div>
 	{/if}
+<<<<<<< HEAD
+=======
+	{#if totalPages > 1}
+		<div class="anime-section__pagination">
+			<ListPagination {currentPage} {totalPages} onpagechange={changePage} />
+		</div>
+	{/if}
+>>>>>>> upstream/main
 </Card>
 
 <style lang="stylus">
@@ -350,6 +480,7 @@ onMount(() => {
 		width: 100%
 
 	&__chips
+<<<<<<< HEAD
 		flex: 1
 		min-width: 0
 		overflow-x: auto
@@ -359,6 +490,16 @@ onMount(() => {
 
 	&__count
 		margin: 0
+=======
+		/* Let the count wrap before squeezing a wrapping Chips group. */
+		flex: 0 1 auto
+		min-width: 0
+		max-width: 100%
+
+	&__count
+		margin: 0
+		margin-inline-start: auto
+>>>>>>> upstream/main
 		color: var(--on-surface-variant)
 		font: var(--m3e-type-body-small)
 		white-space: nowrap
@@ -401,6 +542,7 @@ onMount(() => {
 				background: var(--primary-container)
 				color: var(--on-primary-container)
 
+<<<<<<< HEAD
 	/* 状态筛选过渡：区块位置的大号 contained LoadingIndicator（out = 淡出退场） */
 	&__loading
 		display: flex
@@ -416,6 +558,11 @@ onMount(() => {
 		display: flex
 		justify-content: center
 		margin-top: 1.5rem
+=======
+	&__pagination
+		margin-top: var(--m3e-space-6)
+		min-height: 3rem
+>>>>>>> upstream/main
 
 	&__empty
 		display: flex
@@ -477,6 +624,7 @@ onMount(() => {
 	:global(.anime-card__desc)
 		-webkit-line-clamp: 3
 
+<<<<<<< HEAD
 /* 指示器退场：淡出 + 轻微收拢（reduced-motion 由全局规则压至终态） */
 @keyframes anime-loading-out
 	from
@@ -485,4 +633,6 @@ onMount(() => {
 	to
 		opacity: 0
 		transform: scale(0.96)
+=======
+>>>>>>> upstream/main
 </style>

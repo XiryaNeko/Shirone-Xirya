@@ -23,6 +23,19 @@ export const th: Translation = {
 	[Key.momentsBanner]: "บันทึกสั้น ๆ — ชีวิต งาน และความสุขเล็ก ๆ",
 	[Key.momentsCount]: "ชิ้น",
 	[Key.momentsCounts]: "ชิ้น",
+<<<<<<< HEAD
+=======
+	[Key.momentPasswordTitle]: "โมเมนต์ที่ได้รับการป้องกัน",
+	[Key.momentPasswordDescription]:
+		"โมเมนต์นี้ถูกเข้ารหัส โปรดป้อนรหัสผ่านเพื่อปลดล็อกเนื้อหา",
+	[Key.momentPasswordLabel]: "รหัสผ่าน",
+	[Key.momentPasswordShow]: "แสดงรหัสผ่าน",
+	[Key.momentPasswordHide]: "ซ่อนรหัสผ่าน",
+	[Key.momentPasswordRequired]: "กรุณาป้อนรหัสผ่าน",
+	[Key.momentPasswordInvalid]: "รหัสผ่านไม่ถูกต้อง",
+	[Key.momentPasswordUnlock]: "ปลดล็อกโมเมนต์",
+	[Key.momentPasswordUnlocking]: "กำลังถอดรหัส…",
+>>>>>>> upstream/main
 	[Key.pinned]: "ปักหมุด",
 	[Key.loadMore]: "โหลดเพิ่ม",
 
@@ -264,6 +277,10 @@ export const th: Translation = {
 	[Key.paginationNext]: "หน้าถัดไป",
 	[Key.paginationPage]: "หน้า {page}",
 	[Key.paginationJump]: "ไปที่หน้า",
+<<<<<<< HEAD
+=======
+	[Key.paginationLabel]: "การเปลี่ยนหน้า",
+>>>>>>> upstream/main
 	[Key.tagsViewAll]: "ดูแท็กทั้งหมด",
 
 	[Key.author]: "ผู้เขียน",

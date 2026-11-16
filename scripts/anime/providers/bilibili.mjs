@@ -1,9 +1,14 @@
+<<<<<<< HEAD
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 // Package mode runs this provider from node_modules, so the user's project
 // root must come from the process rather than the module's own location.
 const projectRoot = process.cwd();
+=======
+import { applyMirror, downloadCoverLocally } from "./cover.mjs";
+
+>>>>>>> upstream/main
 const API_BASE = "https://api.bilibili.com/x/space/bangumi/follow/list";
 const USER_AGENT =
 	"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
@@ -29,6 +34,7 @@ function parseBiliProgress(rawProgress) {
 	return undefined;
 }
 
+<<<<<<< HEAD
 function detectImageExtension(buffer, contentType) {
 	if (buffer && buffer.length >= 4) {
 		// JPEG: FF D8 FF
@@ -127,6 +133,24 @@ async function downloadCoverLocally(coverUrl, id, coverConfig = {}) {
 		);
 	}
 	return undefined;
+=======
+async function downloadBilibiliCover(coverUrl, id, coverConfig = {}) {
+	if (!coverUrl || !coverUrl.startsWith("https://")) return undefined;
+
+	// 若启用了 useWebp（默认 true），B站图片 URL 追加裁剪尺寸与 webp 转换参数，避免 2MB 原图直落盘
+	let targetUrl = coverUrl;
+	if (coverConfig.useWebp !== false && !targetUrl.includes("@")) {
+		targetUrl = `${targetUrl}@220w_280h.webp`;
+	}
+
+	return downloadCoverLocally(targetUrl, `bili_${id}`, {
+		headers: {
+			"User-Agent": USER_AGENT,
+			Referer: "https://www.bilibili.com/",
+		},
+		tag: "Bilibili",
+	});
+>>>>>>> upstream/main
 }
 
 /**
@@ -288,15 +312,27 @@ export async function fetchBilibiliData(bilibiliConfig) {
 		}
 
 		if (coverConfig.mode === "local" && cover) {
+<<<<<<< HEAD
 			const localCover = await downloadCoverLocally(cover, idKey, coverConfig);
+=======
+			const localCover = await downloadBilibiliCover(
+				cover,
+				idKey,
+				coverConfig,
+			);
+>>>>>>> upstream/main
 			cover = localCover || cover;
 		} else if (coverConfig.mode === "remote" && cover) {
 			if (coverConfig.useWebp !== false && !cover.includes("@")) {
 				cover = `${cover}@220w_280h.webp`;
 			}
+<<<<<<< HEAD
 			if (coverConfig.mirror) {
 				cover = `${coverConfig.mirror.replace(/\/+$/, "")}/${cover.replace(/^https?:\/\//, "")}`;
 			}
+=======
+			cover = applyMirror(cover, coverConfig.mirror);
+>>>>>>> upstream/main
 		} else if (coverConfig.mode === "none") {
 			cover = "";
 		}

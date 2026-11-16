@@ -92,6 +92,16 @@ export const momentSchema: z.ZodType = z.object({
 		)
 		.optional()
 		.default([]),
+<<<<<<< HEAD
+=======
+	/* Moment encryption */
+	encrypted: z.boolean().optional().default(false),
+	password: z
+		.union([z.string(), z.number()])
+		.transform((value) => String(value))
+		.optional(),
+	passwordHint: z.string().optional().default(""),
+>>>>>>> upstream/main
 	draft: z.boolean().optional().default(false),
 });
 

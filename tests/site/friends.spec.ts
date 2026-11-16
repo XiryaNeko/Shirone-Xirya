@@ -1,7 +1,11 @@
 import { expect, test } from "@playwright/test";
 
 /**
+<<<<<<< HEAD
  * 友链页功能锁定（pages/friends.astro -> organisms/FriendSection.svelte，client:only）。
+=======
+ * 友链页功能锁定（pages/friends.astro -> organisms/FriendSection.svelte，client:visible）。
+>>>>>>> upstream/main
  * 视觉约束对齐站点设计语言：PageHeader 页内大标题（装饰图标）、胶囊搜索条、
  * 官方 Chips 筛选原子、PostCard 风格卡片（hover 箭头 + #tag 弱文本标签）、
  * 筛选状态 URL 同步（?q= / ?tag=）。
@@ -81,7 +85,11 @@ test.describe("友链页", () => {
 test.describe("友链页 Swup 导航", () => {
 	test.use({ viewport: { width: 1280, height: 900 } });
 
+<<<<<<< HEAD
 	test("重复进入后保持组件样式和加载指示器居中", async ({ page }) => {
+=======
+	test("重复进入后保持组件样式并立即筛选", async ({ page }) => {
+>>>>>>> upstream/main
 		await page.goto("/", { waitUntil: "networkidle" });
 
 		for (let visit = 0; visit < 3; visit++) {
@@ -101,6 +109,7 @@ test.describe("友链页 Swup 导航", () => {
 				exact: true,
 			});
 			await blogFilter.click();
+<<<<<<< HEAD
 			const loading = page.locator(".friend-section__loading");
 			const indicator = loading.locator(".m3-loading");
 			await expect(loading).toBeVisible();
@@ -119,6 +128,10 @@ test.describe("友链页 Swup 导航", () => {
 						(centers[1]!.x + centers[1]!.width / 2),
 				),
 			).toBeLessThanOrEqual(1);
+=======
+			await expect(page.locator(".friend-card")).toHaveCount(1);
+			await expect(page.locator(".friend-section__loading")).toHaveCount(0);
+>>>>>>> upstream/main
 
 			await page.locator('#top-row a[data-nav-key="home"]').click();
 			await expect(page).toHaveURL(/\/$/);

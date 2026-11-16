@@ -1,7 +1,11 @@
 ---
 /**
  * 番剧收藏页：数据经 utils/anime-data（AnimeSource 分发，本地/快照/Dev热加载）
+<<<<<<< HEAD
  * 构建期/Dev环境取得后交给客户端岛渲染（筛选/过渡/加载更多均为交互态）。
+=======
+ * 构建期/Dev环境取得后交给客户端岛渲染（筛选/过渡/分页均为交互态）。
+>>>>>>> upstream/main
  */
 import AnimeSection from "@components/organisms/AnimeSection.svelte";
 import I18nKey from "@i18n/i18nKey";
@@ -24,5 +28,15 @@ const animes = await getAnimeList();
 ---
 
 <MainGridLayout title={pageTitle} description={pageDescription} page="anime">
+<<<<<<< HEAD
     <AnimeSection animes={animes} title={pageTitle} subtitle={pageDescription} client:visible></AnimeSection>
+=======
+	<AnimeSection
+		animes={animes}
+		title={pageTitle}
+		subtitle={pageDescription}
+		pageSize={animeConfig.pageSize}
+		client:visible
+	/>
+>>>>>>> upstream/main
 </MainGridLayout>

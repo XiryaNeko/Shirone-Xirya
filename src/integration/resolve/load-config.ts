@@ -10,6 +10,10 @@ import {
 import { createRequire } from "node:module";
 import { join, relative } from "node:path";
 import { pathToFileURL } from "node:url";
+<<<<<<< HEAD
+=======
+import { aliasPattern, THEME_ALIASES } from "../aliases.ts";
+>>>>>>> upstream/main
 import type { ResolvedShironesPaths } from "../types.ts";
 import { normalisePath } from "./paths.ts";
 import {
@@ -66,6 +70,7 @@ export function probeFile(base: string): string | null {
 	return null;
 }
 
+<<<<<<< HEAD
 const ALIAS_MAP: Record<string, string> = {
 	"@/": "",
 	"@components/": "components/",
@@ -76,6 +81,8 @@ const ALIAS_MAP: Record<string, string> = {
 	"@assets/": "assets/",
 };
 
+=======
+>>>>>>> upstream/main
 /**
  * esbuild plugin mirroring the Vite overlay so Node-side and browser-side
  * resolve to the same files.
@@ -100,12 +107,22 @@ function overlayEsbuildPlugin(
 			// Theme path aliases (`@/config/...`, `@utils/...`, ...).
 			build.onResolve(
 				{
+<<<<<<< HEAD
 					filter:
 						/^@(\/|components\/|utils\/|layouts\/|i18n\/|constants\/|assets\/)/,
 				},
 				// biome-ignore lint/suspicious/noExplicitAny: see above.
 				(args: any) => {
 					for (const [prefix, sub] of Object.entries(ALIAS_MAP)) {
+=======
+					filter: new RegExp(
+						`^(?:${THEME_ALIASES.map(([prefix]) => aliasPattern(prefix)).join("|")})`,
+					),
+				},
+				// biome-ignore lint/suspicious/noExplicitAny: see above.
+				(args: any) => {
+					for (const [prefix, sub] of THEME_ALIASES) {
+>>>>>>> upstream/main
 						if (!args.path.startsWith(prefix)) continue;
 						const target = join(
 							paths.packageSrc,

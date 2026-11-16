@@ -1,12 +1,20 @@
 import { expect, test } from "@playwright/test";
 
 /**
+<<<<<<< HEAD
  * 番剧页功能锁定（pages/anime.astro -> organisms/AnimeSection.svelte，client:only）。
  * 交互语言与友链/动态页同构：PageHeader 页内大标题（装饰图标）、
  * 官方 Chips 状态筛选原子（单选、再点取消）、筛选状态 URL 同步（?status=）、
  * LoadingIndicator 三段过渡、加载更多按钮。
  * 布局形态跟随全局文章列表偏好（localStorage `post-list-mode`，DisplaySettings
  * 切换广播 post-list-layout-change 事件）：grid 海报网格 / list 横向卡。
+=======
+ * 番剧页功能锁定（pages/anime.astro -> organisms/AnimeSection.svelte，client:visible）。
+ * 交互语言与友链/动态页同构：PageHeader 页内大标题（装饰图标）、
+ * 官方 Chips 状态筛选原子（单选、再点取消）、筛选状态 URL 同步（?status=）、
+ * 本地筛选即时更新，结果分页。
+ * 布局偏好独立存储（localStorage `shirone:anime-layout-mode`）：grid 海报网格 / list 横向卡。
+>>>>>>> upstream/main
  * 数据来自 src/data/anime.ts（经 utils/anime-data.getAnimeList 稳定顺序），
  * 断言基于 Mizuki 迁移数据集（5 条：watching×3/completed/planned，带真实封面与
  * Bilibili 外链）；站点默认语言为 en（siteConfig.lang），文案断言用英文。
@@ -16,9 +24,15 @@ const ANIME_COUNT = 5;
 
 test.describe("番剧页", () => {
 	test.beforeEach(async ({ page }) => {
+<<<<<<< HEAD
 		// 卡片级断言跑在确定布局下：预置 grid 偏好（默认 list 见专项用例）
 		await page.addInitScript(() =>
 			localStorage.setItem("post-list-mode", "grid"),
+=======
+		// 卡片级断言跑在确定布局下：预置番剧页独立的 grid 偏好。
+		await page.addInitScript(() =>
+			localStorage.setItem("shirone:anime-layout-mode", "grid"),
+>>>>>>> upstream/main
 		);
 		await page.goto("/anime/");
 		await expect(page.locator(".anime-card")).toHaveCount(ANIME_COUNT);
@@ -119,6 +133,7 @@ test.describe("番剧页", () => {
 		);
 	});
 
+<<<<<<< HEAD
 	test("状态筛选切换播放 LoadingIndicator 过渡后揭幕", async ({ page }) => {
 		await page.getByRole("button", { name: "Planned", exact: true }).click();
 		// 三段过渡的指示器阶段（contained LoadingIndicator 出现在内容区）
@@ -126,6 +141,10 @@ test.describe("番剧页", () => {
 			page.locator(".anime-section__loading .m3-loading--contained"),
 		).toBeVisible();
 		// 过渡收敛后只剩 planned 一张卡
+=======
+	test("本地状态筛选立即揭幕，不伪造网络等待", async ({ page }) => {
+		await page.getByRole("button", { name: "Planned", exact: true }).click();
+>>>>>>> upstream/main
 		await expect(page.locator(".anime-card")).toHaveCount(1);
 		await expect(page.locator(".anime-card__title")).toHaveText(
 			"Is the Order a Rabbit?",

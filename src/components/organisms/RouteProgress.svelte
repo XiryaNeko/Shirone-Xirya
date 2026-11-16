@@ -22,11 +22,27 @@ function hide() {
 }
 
 onMount(() => {
+<<<<<<< HEAD
 	document.addEventListener("swup:visit:start", show);
 	document.addEventListener("swup:page:view", hide);
 	return () => {
 		document.removeEventListener("swup:visit:start", show);
 		document.removeEventListener("swup:page:view", hide);
+=======
+	const endEvents = [
+		"swup:page:view",
+		"swup:visit:end",
+		"swup:visit:abort",
+		"swup:visit:fail",
+		"swup:fetch:error",
+		"swup:fetch:timeout",
+	];
+	document.addEventListener("swup:visit:start", show);
+	for (const event of endEvents) document.addEventListener(event, hide);
+	return () => {
+		document.removeEventListener("swup:visit:start", show);
+		for (const event of endEvents) document.removeEventListener(event, hide);
+>>>>>>> upstream/main
 	};
 });
 </script>

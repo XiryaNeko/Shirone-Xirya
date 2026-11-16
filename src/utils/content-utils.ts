@@ -6,6 +6,11 @@ import {
 	validatePublicationMetadata,
 } from "@utils/content-date";
 import { siteMarkdownProcessor } from "@utils/markdown-processor";
+<<<<<<< HEAD
+=======
+import { isEncryptedMoment } from "@utils/moment-encryption";
+import { encryptProtectedContent } from "@utils/password-protection";
+>>>>>>> upstream/main
 import { initPostIdMap } from "@utils/permalink-utils";
 import {
 	findUnknownSeriesSlugs,
@@ -14,6 +19,10 @@ import {
 	type SeriesEntity,
 } from "@utils/series-utils";
 import { getCategoryUrl, getPostUrl, url } from "@utils/url-utils";
+<<<<<<< HEAD
+=======
+import type { ProtectedPayload } from "@/types/protectedContent";
+>>>>>>> upstream/main
 
 /**
  * 加载系列实体目录（Astro 内容层会缓存集合加载，多次调用成本可忽略）。
@@ -194,7 +203,11 @@ export type MomentImage = {
 	thumbnailSrcset?: string;
 };
 
+<<<<<<< HEAD
 export type MomentItem = {
+=======
+type MomentItemBase = {
+>>>>>>> upstream/main
 	id: string;
 	/** ISO 字符串（Date 无法跨岛序列化） */
 	published: string;
@@ -204,10 +217,37 @@ export type MomentItem = {
 	location: string;
 	/** 心情 Iconify 图标名 */
 	mood: string;
+<<<<<<< HEAD
+=======
+	/** 标签筛选使用的公开元数据；加密动态的展示标签仍保留在密文中。 */
+	filterTags: string[];
+>>>>>>> upstream/main
 	tags: string[];
 	images: MomentImage[];
 };
 
+<<<<<<< HEAD
+=======
+export type MomentProtectedContent = Pick<
+	MomentItemBase,
+	"html" | "location" | "mood" | "tags" | "images"
+>;
+
+export type PublicMomentItem = MomentItemBase & {
+	encrypted: false;
+	passwordHint: "";
+	payload: null;
+};
+
+export type ProtectedMomentItem = MomentItemBase & {
+	encrypted: true;
+	passwordHint: string;
+	payload: ProtectedPayload;
+};
+
+export type MomentItem = PublicMomentItem | ProtectedMomentItem;
+
+>>>>>>> upstream/main
 /** 渲染器按需创建并缓存（插件加载较重，全构建期只跑一次） */
 let momentsRendererPromise: ReturnType<
 	typeof siteMarkdownProcessor.createRenderer
@@ -256,6 +296,7 @@ export async function getSortedMoments(): Promise<MomentItem[]> {
 
 	return Promise.all(
 		sorted.map(async (entry) => {
+<<<<<<< HEAD
 			const { code } = await renderer.render(entry.body ?? "", {
 				frontmatter: entry.data as unknown as Record<string, unknown>,
 			});
@@ -264,11 +305,59 @@ export async function getSortedMoments(): Promise<MomentItem[]> {
 				published: new Date(entry.data.published).toISOString(),
 				html: code,
 				pinned: entry.data.pinned,
+=======
+			const renderFrontmatter = {
+				...(entry.data as unknown as Record<string, unknown>),
+			};
+			delete renderFrontmatter.password;
+			const { code } = await renderer.render(entry.body ?? "", {
+				frontmatter: renderFrontmatter,
+			});
+			const content: MomentProtectedContent = {
+				html: code,
+>>>>>>> upstream/main
 				location: entry.data.location,
 				mood: entry.data.mood,
 				tags: entry.data.tags,
 				images: entry.data.images.map(withMomentThumbnails),
+<<<<<<< HEAD
 			} satisfies MomentItem;
+=======
+			};
+			if (isEncryptedMoment(entry.data)) {
+				const scope = `moment:${entry.id}`;
+				const payload = await encryptProtectedContent(
+					JSON.stringify(content),
+					String(entry.data.password),
+					scope,
+					"application/json",
+				);
+				return {
+					id: entry.id,
+					published: new Date(entry.data.published).toISOString(),
+					html: "",
+					pinned: entry.data.pinned,
+					location: "",
+					mood: "",
+					filterTags: entry.data.tags,
+					tags: [],
+					images: [],
+					encrypted: true,
+					passwordHint: entry.data.passwordHint,
+					payload,
+				} satisfies ProtectedMomentItem;
+			}
+			return {
+				id: entry.id,
+				published: new Date(entry.data.published).toISOString(),
+				...content,
+				filterTags: content.tags,
+				pinned: entry.data.pinned,
+				encrypted: false,
+				passwordHint: "",
+				payload: null,
+			} satisfies PublicMomentItem;
+>>>>>>> upstream/main
 		}),
 	);
 }

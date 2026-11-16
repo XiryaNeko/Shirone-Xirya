@@ -8,10 +8,19 @@
  *   避免动态 class 触发 Svelte unused-CSS 剥离（见 rules/pitfalls.md 1.6）。
  */
 
+<<<<<<< HEAD
 import ProgressIndicator from "@components/atoms/feedback/ProgressIndicator.svelte";
 import { i18n } from "@i18n/translation";
 import Icon from "@iconify/svelte";
 import { ANIME_STATUS_META } from "@utils/anime/status";
+=======
+import Icon from "@components/atoms/display/Icon.svelte";
+import Skeleton from "@components/atoms/display/Skeleton.svelte";
+import ProgressIndicator from "@components/atoms/feedback/ProgressIndicator.svelte";
+import { i18n } from "@i18n/translation";
+import { ANIME_STATUS_META } from "@utils/anime/status";
+import { imageFeedback } from "@utils/image-feedback";
+>>>>>>> upstream/main
 import { reveal } from "@utils/motion";
 import { url } from "@utils/url-utils";
 import type { AnimeItem } from "../../data/anime";
@@ -51,12 +60,24 @@ const metaLine = $derived(
 				alt={anime.title}
 				loading="lazy"
 				referrerpolicy="no-referrer"
+<<<<<<< HEAD
 			/>
 		{:else}
 			<span class="anime-card__placeholder" aria-hidden="true">
 				<Icon icon="material-symbols:live-tv-outline-rounded" />
 			</span>
 		{/if}
+=======
+				use:imageFeedback={anime.cover}
+			/>
+			<span class="anime-card__loading" aria-hidden="true">
+				<Skeleton width="100%" height="100%" radius="0" />
+			</span>
+		{/if}
+		<span class="anime-card__placeholder" aria-hidden="true">
+			<Icon icon="material-symbols:live-tv-outline-rounded" />
+		</span>
+>>>>>>> upstream/main
 		<span class="anime-card__scrim" aria-hidden="true"></span>
 		{#if anime.link}
 			<!-- 可点封面：悬停深色 scrim + 播放钮 -->
@@ -76,6 +97,10 @@ const metaLine = $derived(
 			href={anime.link}
 			target="_blank"
 			rel="noopener noreferrer"
+<<<<<<< HEAD
+=======
+			aria-label={`${anime.title} ${anime.rating}`}
+>>>>>>> upstream/main
 		>
 			{#if !anime.cover}
 				<span class="sr-only">{anime.title}</span>
@@ -163,7 +188,14 @@ const metaLine = $derived(
 		width: 100%
 		height: 100%
 		object-fit: cover
+<<<<<<< HEAD
 		transition: transform var(--m3e-duration-long) var(--m3e-easing-emphasized-decelerate)
+=======
+		transition: transform var(--m3e-duration-long) var(--m3e-easing-emphasized-decelerate), opacity var(--m3e-duration-short) var(--m3e-easing-standard)
+		/* The action owns this runtime attribute; exclude it from CSS pruning. */
+		&:global([data-image-state="pending"]), &:global([data-image-state="error"])
+			opacity: 0
+>>>>>>> upstream/main
 		.anime-card:hover &
 			transform: scale(1.05)
 
@@ -212,6 +244,21 @@ const metaLine = $derived(
 			width: 2.5rem
 			height: 2.5rem
 
+<<<<<<< HEAD
+=======
+	&__cover:has(:global(img:not([data-image-state="error"]))) .anime-card__placeholder
+		display: none
+
+	&__loading
+		display: none
+		position: absolute
+		inset: 0
+		pointer-events: none
+
+	&__cover:has(:global(img[data-image-state="pending"])) .anime-card__loading
+		display: block
+
+>>>>>>> upstream/main
 	/* 评分 scrim pill：毛玻璃 + star 图标 + 数字 */
 	&__rating
 		position: absolute

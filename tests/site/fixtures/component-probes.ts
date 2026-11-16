@@ -1,7 +1,16 @@
+<<<<<<< HEAD
 import { mount } from "svelte";
 import Icon from "../../../src/components/atoms/display/Icon.svelte";
 import AnimeCard from "../../../src/components/molecules/AnimeCard.svelte";
 import CalendarView from "../../../src/components/molecules/CalendarView.svelte";
+=======
+import { mount, tick } from "svelte";
+import Icon from "../../../src/components/atoms/display/Icon.svelte";
+import AnimeCard from "../../../src/components/molecules/AnimeCard.svelte";
+import CalendarView from "../../../src/components/molecules/CalendarView.svelte";
+import ListPagination from "../../../src/components/molecules/ListPagination.svelte";
+import { siteConfig } from "../../../src/config/siteConfig.ts";
+>>>>>>> upstream/main
 import type { AnimeItem } from "../../../src/data/anime.ts";
 
 export function mountIconProbe(target: HTMLElement, dataIcon?: string) {
@@ -38,3 +47,22 @@ export function mountCalendarProbe(target: HTMLElement, locale: string) {
 		},
 	});
 }
+<<<<<<< HEAD
+=======
+
+export async function mountPaginationProbe(target: HTMLElement) {
+	const previousLang = siteConfig.lang;
+	try {
+		siteConfig.lang = "zh_CN";
+		const component = mount(ListPagination, {
+			target,
+			props: { currentPage: 2, totalPages: 8, onpagechange: () => {} },
+		});
+		await tick();
+		await tick();
+		return component;
+	} finally {
+		siteConfig.lang = previousLang;
+	}
+}
+>>>>>>> upstream/main

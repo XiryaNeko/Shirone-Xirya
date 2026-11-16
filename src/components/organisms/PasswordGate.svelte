@@ -7,6 +7,10 @@ import { i18n } from "@i18n/translation";
 import Icon from "@iconify/svelte";
 import { decryptProtectedContent } from "@utils/password-protection";
 import {
+<<<<<<< HEAD
+=======
+	clearProtectedSession,
+>>>>>>> upstream/main
 	protectedPayloadId,
 	readProtectedSession,
 	writeProtectedSession,
@@ -21,6 +25,11 @@ let {
 	title = "",
 	description = "",
 	headingIcon = "",
+<<<<<<< HEAD
+=======
+	variant = "default",
+	cacheSession = true,
+>>>>>>> upstream/main
 	onunlocked,
 }: {
 	payload: ProtectedPayload;
@@ -29,6 +38,12 @@ let {
 	title?: string;
 	description?: string;
 	headingIcon?: string;
+<<<<<<< HEAD
+=======
+	variant?: "default" | "compact";
+	/** 是否缓存当前标签页的解锁内容。 */
+	cacheSession?: boolean;
+>>>>>>> upstream/main
 	onunlocked: (content: string) => void;
 } = $props();
 
@@ -37,6 +52,7 @@ let error = $state("");
 let loading = $state(false);
 let passwordVisible = $state(false);
 
+<<<<<<< HEAD
 const isPostScope = scope.startsWith("post:");
 const resolvedTitle =
 	title ||
@@ -53,13 +69,76 @@ const resolvedHeadingIcon =
 	(isPostScope
 		? "material-symbols:article-outline-rounded"
 		: "material-symbols:photo-library-outline-rounded");
+=======
+const contentKind = scope.startsWith("post:")
+	? "post"
+	: scope.startsWith("moment:")
+		? "moment"
+		: "album";
+const copyKeys = {
+	post: {
+		title: I18nKey.postPasswordTitle,
+		description: I18nKey.postPasswordDescription,
+		label: I18nKey.postPasswordLabel,
+		show: I18nKey.postPasswordShow,
+		hide: I18nKey.postPasswordHide,
+		required: I18nKey.postPasswordRequired,
+		invalid: I18nKey.postPasswordInvalid,
+		unlock: I18nKey.postPasswordUnlock,
+		unlocking: I18nKey.postPasswordUnlocking,
+	},
+	album: {
+		title: I18nKey.albumPasswordTitle,
+		description: I18nKey.albumPasswordDescription,
+		label: I18nKey.albumPasswordLabel,
+		show: I18nKey.albumPasswordShow,
+		hide: I18nKey.albumPasswordHide,
+		required: I18nKey.albumPasswordRequired,
+		invalid: I18nKey.albumPasswordInvalid,
+		unlock: I18nKey.albumPasswordUnlock,
+		unlocking: I18nKey.albumPasswordUnlocking,
+	},
+	moment: {
+		title: I18nKey.momentPasswordTitle,
+		description: I18nKey.momentPasswordDescription,
+		label: I18nKey.momentPasswordLabel,
+		show: I18nKey.momentPasswordShow,
+		hide: I18nKey.momentPasswordHide,
+		required: I18nKey.momentPasswordRequired,
+		invalid: I18nKey.momentPasswordInvalid,
+		unlock: I18nKey.momentPasswordUnlock,
+		unlocking: I18nKey.momentPasswordUnlocking,
+	},
+} as const;
+const copy = copyKeys[contentKind];
+const resolvedTitle = title || i18n(copy.title);
+const resolvedDescription = description || i18n(copy.description);
+const resolvedHeadingIcon =
+	headingIcon ||
+	(contentKind === "post"
+		? "material-symbols:article-outline-rounded"
+		: contentKind === "moment"
+			? "material-symbols:lock-outline-rounded"
+			: "material-symbols:photo-library-outline-rounded");
+>>>>>>> upstream/main
 
 const inputId = `password-gate-${scope.replace(/[^a-zA-Z0-9_-]/g, "-")}`;
 const headingId = `${inputId}-title`;
 const payloadId = protectedPayloadId(payload);
+<<<<<<< HEAD
 const expectedContentType = isPostScope ? "text/html" : "application/json";
 
 onMount(() => {
+=======
+const expectedContentType =
+	contentKind === "post" ? "text/html" : "application/json";
+
+onMount(() => {
+	if (!cacheSession) {
+		clearProtectedSession(scope);
+		return;
+	}
+>>>>>>> upstream/main
 	if (payload.contentType !== expectedContentType) return;
 	const session = readProtectedSession(scope, payloadId);
 	if (session) onunlocked(session.content);
@@ -71,9 +150,13 @@ function clearError() {
 
 async function unlock() {
 	if (!password.trim()) {
+<<<<<<< HEAD
 		error = isPostScope
 			? i18n(I18nKey.postPasswordRequired)
 			: i18n(I18nKey.albumPasswordRequired);
+=======
+		error = i18n(copy.required);
+>>>>>>> upstream/main
 		return;
 	}
 	error = "";
@@ -81,12 +164,19 @@ async function unlock() {
 	try {
 		if (payload.contentType !== expectedContentType) throw new Error();
 		const content = await decryptProtectedContent(payload, password, scope);
+<<<<<<< HEAD
 		writeProtectedSession(scope, payloadId, content);
 		onunlocked(content);
 	} catch {
 		error = isPostScope
 			? i18n(I18nKey.postPasswordInvalid)
 			: i18n(I18nKey.albumPasswordInvalid);
+=======
+		if (cacheSession) writeProtectedSession(scope, payloadId, content);
+		onunlocked(content);
+	} catch {
+		error = i18n(copy.invalid);
+>>>>>>> upstream/main
 	} finally {
 		loading = false;
 	}
@@ -94,6 +184,7 @@ async function unlock() {
 </script>
 
 <section
+<<<<<<< HEAD
 	class={`password-gate${loading ? " password-gate--loading" : ""}`}
 	aria-labelledby={headingId}
 	aria-busy={loading}
@@ -109,6 +200,25 @@ async function unlock() {
 			<Icon icon="material-symbols:shield-lock-rounded" aria-hidden="true" />
 		</div>
 	</div>
+=======
+	class={`password-gate password-gate--${variant}${loading ? " password-gate--loading" : ""}`}
+	aria-labelledby={headingId}
+	aria-busy={loading}
+>
+	{#if variant === "default"}
+		<div class="password-gate__visual" aria-hidden="true">
+			<div class="password-gate__mosaic">
+				<span class={`password-gate__tile password-gate__tile--one`}></span>
+				<span class={`password-gate__tile password-gate__tile--two`}></span>
+				<span class={`password-gate__tile password-gate__tile--three`}></span>
+				<span class={`password-gate__tile password-gate__tile--four`}></span>
+			</div>
+			<div class="password-gate__seal">
+				<Icon icon="material-symbols:shield-lock-rounded" aria-hidden="true" />
+			</div>
+		</div>
+	{/if}
+>>>>>>> upstream/main
 
 	<div class="password-gate__content">
 		<div class="password-gate__heading">
@@ -141,12 +251,17 @@ async function unlock() {
 					name="password"
 					type={passwordVisible ? "text" : "password"}
 					bind:value={password}
+<<<<<<< HEAD
 					label={isPostScope
 						? i18n(I18nKey.postPasswordLabel)
 						: i18n(I18nKey.albumPasswordLabel)}
 					placeholder={isPostScope
 						? i18n(I18nKey.postPasswordLabel)
 						: i18n(I18nKey.albumPasswordLabel)}
+=======
+					label={i18n(copy.label)}
+					placeholder={i18n(copy.label)}
+>>>>>>> upstream/main
 					variant="outlined"
 					autocomplete="current-password"
 					disabled={loading}
@@ -162,9 +277,13 @@ async function unlock() {
 							: "material-symbols:visibility-rounded"}
 						size="small"
 						label={i18n(
+<<<<<<< HEAD
 							passwordVisible
 								? (isPostScope ? I18nKey.postPasswordHide : I18nKey.albumPasswordHide)
 								: (isPostScope ? I18nKey.postPasswordShow : I18nKey.albumPasswordShow),
+=======
+							passwordVisible ? copy.hide : copy.show,
+>>>>>>> upstream/main
 						)}
 						disabled={loading}
 						onclick={() => (passwordVisible = !passwordVisible)}
@@ -174,12 +293,17 @@ async function unlock() {
 			<Button
 				type="submit"
 				label={loading
+<<<<<<< HEAD
 					? (isPostScope
 							? i18n(I18nKey.postPasswordUnlocking)
 							: i18n(I18nKey.albumPasswordUnlocking))
 					: (isPostScope
 							? i18n(I18nKey.postPasswordUnlock)
 							: i18n(I18nKey.albumPasswordUnlock))}
+=======
+				? i18n(copy.unlocking)
+				: i18n(copy.unlock)}
+>>>>>>> upstream/main
 				icon={loading
 					? "material-symbols:progress-activity"
 					: "material-symbols:lock-open-rounded"}
@@ -370,6 +494,43 @@ async function unlock() {
 		&__heading
 			gap: var(--m3e-space-3)
 
+<<<<<<< HEAD
+=======
+.password-gate
+	&--compact
+		display: block
+		max-width: none
+		min-height: 0
+		border: 0
+		border-radius: 0
+		background: transparent
+
+		.password-gate__content
+			gap: var(--m3e-space-3)
+			padding: var(--m3e-space-3) 0 0
+
+		.password-gate__heading
+			gap: var(--m3e-space-3)
+
+		.password-gate__heading-icon
+			width: 2.5rem
+			height: 2.5rem
+
+		.password-gate__heading h2
+			font: var(--m3e-type-title-medium)
+			font-weight: 600
+
+		.password-gate__heading p
+			font: var(--m3e-type-body-small)
+
+		.password-gate__hint
+			padding: var(--m3e-space-2) var(--m3e-space-3)
+			font: var(--m3e-type-body-small)
+
+		.password-gate__field
+			min-height: 4rem
+
+>>>>>>> upstream/main
 @media (prefers-reduced-motion: reduce)
 	.password-gate--loading :global(.password-gate__submit .m3-button__icon)
 		animation: none

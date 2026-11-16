@@ -14,6 +14,10 @@ import MomentCard, {
 	type MomentAuthor,
 } from "@components/molecules/MomentCard.svelte";
 import PageHeader from "@components/molecules/PageHeader.svelte";
+<<<<<<< HEAD
+=======
+import ProtectedMoment from "@components/organisms/ProtectedMoment.svelte";
+>>>>>>> upstream/main
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import type { MomentItem } from "@utils/content-utils";
@@ -44,7 +48,11 @@ let phase = $state<FilterPhase>("idle");
 let phaseTimers: ReturnType<typeof setTimeout>[] = [];
 
 const tagItems = $derived(
+<<<<<<< HEAD
 	Array.from(new Set(moments.flatMap((moment) => moment.tags)))
+=======
+	Array.from(new Set(moments.flatMap((moment) => moment.filterTags)))
+>>>>>>> upstream/main
 		.sort((a, b) => a.localeCompare(b))
 		.map((tag) => ({ value: tag, label: tag })),
 );
@@ -66,7 +74,11 @@ const filtered = $derived.by(() => {
 	const normalizedQuery = query.trim().toLowerCase();
 
 	return moments.filter((moment) => {
+<<<<<<< HEAD
 		if (selectedTag && !moment.tags.includes(selectedTag)) return false;
+=======
+		if (selectedTag && !moment.filterTags.includes(selectedTag)) return false;
+>>>>>>> upstream/main
 		if (!normalizedQuery) return true;
 		return (searchTexts.get(moment.id) ?? "").includes(normalizedQuery);
 	});
@@ -187,7 +199,15 @@ onMount(() => {
 		{#key `${query}|${selectedTag}`}
 			<div class="moment-section__list">
 				{#each visibleMoments as moment, i (moment.id)}
+<<<<<<< HEAD
 					<MomentCard {moment} {author} delay={Math.min(i, 7) * 45} />
+=======
+					{#if moment.encrypted}
+						<ProtectedMoment {moment} {author} delay={Math.min(i, 7) * 45} />
+					{:else}
+						<MomentCard {moment} {author} delay={Math.min(i, 7) * 45} />
+					{/if}
+>>>>>>> upstream/main
 				{/each}
 			</div>
 		{/key}

@@ -3,12 +3,22 @@
  * M3E 博客原子 — PagePagination 分页器（数据驱动）。
  * currentPage / totalPages / buildUrl(page) 生成页码窗口（省略号折叠），
  * 响应式双形态：
+<<<<<<< HEAD
  * - 移动端（< lg）：简化版 —— 上一页 + 「当前 / 总页」（点击原地变输入框
  *   跳转）+ 下一页，避免窄屏塞满页码按钮；
  * - 桌面端（≥ lg）：完整页码行（箭头 + 页码窗口 + 省略号折叠）。
  * 激活页 primary 实底；文案由消费方传 i18n 结果（不硬编码）。
  */
 import Icon from "@iconify/svelte";
+=======
+ * - 窄容器（< 640px）：简化版 —— 上一页 + 「当前 / 总页」（点击原地变输入框
+ *   跳转）+ 下一页，避免窄屏塞满页码按钮；
+ * - 宽容器（≥ 640px）：完整页码行（箭头 + 页码窗口 + 省略号折叠）。
+ * 激活页 primary 实底；文案由消费方传 i18n 结果（不硬编码）。
+ */
+import Icon from "@components/atoms/display/Icon.svelte";
+import { paginationPages } from "@utils/pagination";
+>>>>>>> upstream/main
 
 interface Props {
 	currentPage: number;
@@ -39,6 +49,7 @@ const {
 } = Astro.props as Props;
 
 const HIDDEN = -1;
+<<<<<<< HEAD
 const VISIBLE = adjacent * 2 + 1;
 
 let count = 1;
@@ -66,6 +77,9 @@ for (let i = l; i <= r; i++) pages.push(i);
 if (r < totalPages - 2) pages.push(HIDDEN);
 if (r === totalPages - 2) pages.push(totalPages - 1);
 if (r < totalPages) pages.push(totalPages);
+=======
+const pages = paginationPages(currentPage, totalPages, adjacent);
+>>>>>>> upstream/main
 
 const prevUrl = currentPage > 1 ? buildUrl(currentPage - 1) : undefined;
 const nextUrl =
@@ -92,7 +106,12 @@ const pageLabel = (p: number) => labels.page.replace("{page}", String(p));
 		<button
 			type="button"
 			class="m3-blog-pagination__jump m3-state-layer"
+<<<<<<< HEAD
 			aria-label={jumpLabel}
+=======
+			aria-label={`${jumpLabel} ${currentPage} / ${totalPages}`}
+			data-static-page-jump
+>>>>>>> upstream/main
 			data-current={currentPage}
 			data-total={totalPages}
 			data-href-template={jumpTemplate}
@@ -162,6 +181,7 @@ const pageLabel = (p: number) => labels.page.replace("{page}", String(p));
 </div>
 
 <style lang="stylus">
+<<<<<<< HEAD
 .m3-blog-pagination
 	display: flex
 	align-items: center
@@ -298,6 +318,9 @@ const pageLabel = (p: number) => labels.page.replace("{page}", String(p));
 		> :global(svg)
 			width: 1.25rem
 			height: 1.25rem
+=======
+@import "../../../styles/pagination.styl"
+>>>>>>> upstream/main
 </style>
 
 <script>
@@ -307,7 +330,11 @@ const pageLabel = (p: number) => labels.page.replace("{page}", String(p));
 	// 事件委托挂在 document 上：分页器在 Swup 容器内，导航替换 DOM 后委托依然有效。
 	document.addEventListener("click", (event) => {
 		const btn = (event.target as HTMLElement | null)?.closest<HTMLElement>(
+<<<<<<< HEAD
 			".m3-blog-pagination__jump",
+=======
+			".m3-blog-pagination__jump[data-static-page-jump]",
+>>>>>>> upstream/main
 		);
 		if (!btn) return;
 
@@ -326,6 +353,11 @@ const pageLabel = (p: number) => labels.page.replace("{page}", String(p));
 		input.setAttribute("aria-label", btnLabel);
 
 		const restore = () => {
+<<<<<<< HEAD
+=======
+			// Replacing a focused input fires blur; detach before mutating its DOM.
+			input.removeEventListener("blur", restore);
+>>>>>>> upstream/main
 			if (input.parentElement) {
 				input.replaceWith(btn);
 			}
