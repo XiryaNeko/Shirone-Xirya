@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-const BANGUMI_API_BASE = "https://api.bgm.tv";
-const USER_AGENT = "Shirone/1.0 (https://github.com/shirone; AnimeSync)";
-=======
 import { applyMirror, downloadCoverLocally } from "./cover.mjs";
 
 const BANGUMI_API_BASE = "https://api.bgm.tv";
@@ -9,7 +5,6 @@ const USER_AGENT = "Shirone/1.0 (https://github.com/shirone; AnimeSync)";
 // lain.bgm.tv 图片下载用浏览器 UA（与 API 请求的标识 UA 区分）
 const IMAGE_USER_AGENT =
 	"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
->>>>>>> upstream/main
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -137,8 +132,6 @@ async function fetchCollectionType(userId, type, status, options) {
 }
 
 /**
-<<<<<<< HEAD
-=======
  * 按封面策略处理单条封面 URL（对齐 Bilibili 的 cover 配置语义）。
  * Bangumi 默认 remote：lain.bgm.tv 无防盗链，直链可显示，快照仅存 URL 字符串。
  */
@@ -170,7 +163,6 @@ function resolveBangumiCover(coverUrl, subjectId, coverConfig) {
 }
 
 /**
->>>>>>> upstream/main
  * Bangumi 提供方数据抓取入口
  */
 export async function fetchBangumiData(bangumiConfig) {
@@ -182,8 +174,6 @@ export async function fetchBangumiData(bangumiConfig) {
 	}
 
 	const requestOptions = bangumiConfig.request || {};
-<<<<<<< HEAD
-=======
 	// 默认 remote：与 Bilibili（默认 local，因防盗链必须本地化）不同，bgm.tv 直链可直接展示
 	const coverConfig = bangumiConfig.cover || { mode: "remote" };
 	console.log(
@@ -191,7 +181,6 @@ export async function fetchBangumiData(bangumiConfig) {
 			coverConfig.mode === "remote" && coverConfig.mirror ? " (mirror)" : ""
 		}`,
 	);
->>>>>>> upstream/main
 	console.log(`[Bangumi] Starting sync for user: ${userId}...`);
 
 	const allEntries = [];
@@ -258,19 +247,13 @@ export async function fetchBangumiData(bangumiConfig) {
 								? detail.total_episodes
 								: 0;
 
-<<<<<<< HEAD
-				const cover =
-=======
 				const coverUrl =
->>>>>>> upstream/main
 					subject.images?.medium ||
 					subject.images?.large ||
 					subject.images?.common ||
 					detail?.images?.medium ||
 					detail?.images?.large ||
 					"";
-<<<<<<< HEAD
-=======
 				const { cover: remoteCover, download: coverDownload } =
 					resolveBangumiCover(coverUrl, subjectId, coverConfig);
 				let cover = remoteCover;
@@ -278,7 +261,6 @@ export async function fetchBangumiData(bangumiConfig) {
 					// 下载失败时回退远程直链，封面不缺位
 					cover = (await coverDownload) || remoteCover;
 				}
->>>>>>> upstream/main
 
 				const rawDate = subject.date || detail?.date || "";
 				const year = rawDate ? String(rawDate).slice(0, 4) : "";

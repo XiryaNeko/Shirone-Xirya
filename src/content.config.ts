@@ -110,8 +110,6 @@ const momentsCollection = defineCollection({
 			)
 			.optional()
 			.default([]),
-<<<<<<< HEAD
-=======
 		/* Moment encryption */
 		encrypted: z.boolean().optional().default(false),
 		password: z
@@ -119,7 +117,6 @@ const momentsCollection = defineCollection({
 			.transform((value) => String(value))
 			.optional(),
 		passwordHint: z.string().optional().default(""),
->>>>>>> upstream/main
 		draft: z.boolean().optional().default(false),
 	}),
 });

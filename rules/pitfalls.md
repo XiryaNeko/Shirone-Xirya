@@ -121,8 +121,6 @@ svelte({
 
 ---
 
-<<<<<<< HEAD
-=======
 ### 1.9 npm 包模式下 dev 的依赖预打包绕过 overlay
 
 **现象**：包模式项目 `astro dev` 的水合文案回落英文（`Search`、`1 friend`），同一页的 SSR 与 `astro build` 却是中文。
@@ -133,7 +131,6 @@ svelte({
 
 ---
 
->>>>>>> upstream/main
 ## 2. CSS / Stylus
 
 ### 2.1 Stylus 嵌套同名子元素会拼错类名

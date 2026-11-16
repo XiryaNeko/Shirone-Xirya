@@ -229,8 +229,6 @@ test("skips the pre-bundle hint for a linked install too", () => {
 	);
 	assert.deepEqual(prebundleCandidates(paths, SPECIFIERS), []);
 });
-<<<<<<< HEAD
-=======
 
 // ── The exclusion that keeps the overlay out of the dep pre-bundle ──────────
 import { prebundleExclude } from "../src/integration/index.ts";
@@ -273,4 +271,3 @@ test("alias sub-directories carry no trailing slash", () => {
 		assert.ok(!sub.endsWith("/"), prefix);
 	}
 });
->>>>>>> upstream/main

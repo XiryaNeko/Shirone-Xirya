@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-import { expect, test } from "@playwright/test";
-=======
 import { expect, type Page, test } from "@playwright/test";
 
 /**
@@ -23,7 +20,6 @@ async function mockRemoteAlbumImages(page: Page) {
 test.beforeEach(async ({ page }) => {
 	await mockRemoteAlbumImages(page);
 });
->>>>>>> upstream/main
 
 test.describe("相册页响应式滚动", () => {
 	test("从手机视口切换到桌面视口后仍可滚动", async ({ page }) => {
@@ -56,15 +52,11 @@ test.describe("相册页响应式滚动", () => {
 
 test.describe("受保护相册", () => {
 	test("提供完整的密码输入与解锁反馈", async ({ page }) => {
-<<<<<<< HEAD
-		await page.goto("/albums/EncryptedExample/", { waitUntil: "networkidle" });
-=======
 		// The gate renders before its media; waiting for network idle would make
 		// this test depend on picsum.photos being reachable and fast.
 		await page.goto("/albums/EncryptedExample/", {
 			waitUntil: "domcontentloaded",
 		});
->>>>>>> upstream/main
 
 		const input = page.getByRole("textbox", { name: "Password" });
 		const submit = page.getByRole("button", { name: "Unlock album" });

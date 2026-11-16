@@ -25,8 +25,6 @@ export const id: Translation = {
 		"Catatan singkat — kehidupan, karya, dan kebahagiaan kecil.",
 	[Key.momentsCount]: "momen",
 	[Key.momentsCounts]: "momen",
-<<<<<<< HEAD
-=======
 	[Key.momentPasswordTitle]: "Momen terlindungi",
 	[Key.momentPasswordDescription]:
 		"Momen ini dienkripsi. Masukkan kata sandi untuk membuka kontennya.",
@@ -37,7 +35,6 @@ export const id: Translation = {
 	[Key.momentPasswordInvalid]: "Kata sandi salah",
 	[Key.momentPasswordUnlock]: "Buka momen",
 	[Key.momentPasswordUnlocking]: "Mendekripsi…",
->>>>>>> upstream/main
 	[Key.pinned]: "Disematkan",
 	[Key.loadMore]: "Muat lainnya",
 
@@ -291,10 +288,7 @@ export const id: Translation = {
 	[Key.paginationNext]: "Halaman berikutnya",
 	[Key.paginationPage]: "Halaman {page}",
 	[Key.paginationJump]: "Lompat ke halaman",
-<<<<<<< HEAD
-=======
 	[Key.paginationLabel]: "Navigasi halaman",
->>>>>>> upstream/main
 	[Key.tagsViewAll]: "Lihat semua tag",
 
 	[Key.author]: "Penulis",

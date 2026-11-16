@@ -1,10 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, isAbsolute, join, relative, resolve } from "node:path";
 import type { Plugin } from "vite";
-<<<<<<< HEAD
-=======
 import { THEME_ALIASES } from "../aliases.ts";
->>>>>>> upstream/main
 import { normalisePath } from "../resolve/paths.ts";
 import {
 	createOverlayTargets,
@@ -22,21 +19,6 @@ export interface OverlayPluginOptions {
 	registryRef: OverrideRegistryRef;
 }
 
-<<<<<<< HEAD
-/** Theme path aliases, mapped to sub-directories of the package `src/`. */
-const ALIAS_MAP: [string, string][] = [
-	["@components/", "components/"],
-	["@utils/", "utils/"],
-	["@layouts/", "layouts/"],
-	["@i18n/", "i18n/"],
-	["@constants/", "constants/"],
-	["@assets/", "assets/"],
-	// `@/` is the broadest pattern and must be tested last.
-	["@/", ""],
-];
-
-=======
->>>>>>> upstream/main
 /** Split a Vite id into its path and query (`?raw`, `?url`, `?astro&type=…`). */
 function splitQuery(id: string): [string, string] {
 	const index = id.indexOf("?");
@@ -97,11 +79,7 @@ export function shironesOverlay(options: OverlayPluginOptions): Plugin {
 
 	/** Map an alias specifier onto an absolute path inside the package. */
 	function resolveAlias(source: string): string | null {
-<<<<<<< HEAD
-		for (const [prefix, sub] of ALIAS_MAP) {
-=======
 		for (const [prefix, sub] of THEME_ALIASES) {
->>>>>>> upstream/main
 			if (!source.startsWith(prefix)) continue;
 			return join(paths.packageSrc, sub, source.slice(prefix.length));
 		}

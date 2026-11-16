@@ -8,14 +8,9 @@
  *   npx shirones init --force    replace template files after backing them up
  *   npx shirones info            detailed status and drift report
  *
-<<<<<<< HEAD
- * The command is intentionally dependency-free so it can run via `npx` in a
- * bare project before anything else is installed.
-=======
  * The command does not rely on dependencies in the user's project. Its
  * `jsonc-parser` dependency ships with this package and loads only when init
  * validates or edits an existing JSONC tsconfig.
->>>>>>> upstream/main
  */
 
 import { spawnSync } from "node:child_process";
@@ -399,14 +394,6 @@ async function ensurePackageJson(
 			changed = true;
 		}
 	}
-<<<<<<< HEAD
-	if (pkg.type !== "module") {
-		pkg.type = "module";
-		changed = true;
-	}
-
-=======
->>>>>>> upstream/main
 	// A fresh project gets the package pin above. On an explicit `--update`,
 	// advance an older Shirone-generated pin to the current package pin too;
 	// otherwise the project would keep running the previous release's pnpm even
@@ -654,23 +641,6 @@ async function installDependencies() {
  * Write a tsconfig that teaches the editor about the theme's path aliases, so
  * `@/types/config` resolves while editing files under `shirones/config/`.
  */
-<<<<<<< HEAD
-async function ensureTsConfig(packageName, { force }) {
-	const tsconfigPath = join(CWD, "tsconfig.json");
-	const themeSrc = `./node_modules/${packageName}/src`;
-
-	const desiredPaths = {
-		"@/*": [`${themeSrc}/*`],
-		"@components/*": [`${themeSrc}/components/*`],
-		"@utils/*": [`${themeSrc}/utils/*`],
-		"@layouts/*": [`${themeSrc}/layouts/*`],
-		"@i18n/*": [`${themeSrc}/i18n/*`],
-		"@constants/*": [`${themeSrc}/constants/*`],
-		"@assets/*": [`${themeSrc}/assets/*`],
-	};
-
-	if (!existsSync(tsconfigPath)) {
-=======
 async function readJsoncTsConfig(tsconfigPath) {
 	const original = await readFile(tsconfigPath, "utf8");
 	const hasBom = original.startsWith("\uFEFF");
@@ -784,7 +754,6 @@ async function ensureTsConfig(packageName, { force }) {
 	const tsconfigPath = join(CWD, "tsconfig.json");
 	if (!existsSync(tsconfigPath)) {
 		const desiredPaths = getThemeTsConfigPaths(packageName, ".");
->>>>>>> upstream/main
 		const tsconfig = {
 			extends: "astro/tsconfigs/strict",
 			include: [".astro/types.d.ts", "**/*"],
@@ -804,35 +773,6 @@ async function ensureTsConfig(packageName, { force }) {
 		return;
 	}
 
-<<<<<<< HEAD
-	const tsconfig = JSON.parse(await readFile(tsconfigPath, "utf8"));
-	tsconfig.compilerOptions ??= {};
-	tsconfig.compilerOptions.baseUrl ??= ".";
-	tsconfig.compilerOptions.paths ??= {};
-
-	let changed = false;
-	for (const [key, value] of Object.entries(desiredPaths)) {
-		if (!tsconfig.compilerOptions.paths[key] || force) {
-			tsconfig.compilerOptions.paths[key] = value;
-			changed = true;
-		}
-	}
-	if (changed) {
-		if (force) await backup("tsconfig.json");
-		await writeFile(
-			tsconfigPath,
-			`${JSON.stringify(tsconfig, null, 2)}\n`,
-			"utf8",
-		);
-		log.ok(
-			force
-				? "tsconfig.json (theme path aliases; previous copy backed up)"
-				: "tsconfig.json (theme path aliases)",
-		);
-	} else {
-		log.skip("tsconfig.json already configured");
-	}
-=======
 	const { source, hasBom, compilerOptions, currentPaths, jsonc } =
 		await readJsoncTsConfig(tsconfigPath);
 	const baseUrl = compilerOptions?.baseUrl ?? ".";
@@ -866,7 +806,6 @@ async function ensureTsConfig(packageName, { force }) {
 			? "tsconfig.json (theme path aliases; previous copy backed up)"
 			: "tsconfig.json (theme path aliases)",
 	);
->>>>>>> upstream/main
 }
 
 /** Every filename Astro will load a config from, in its own resolution order. */
@@ -914,11 +853,6 @@ async function replaceDirectory(from, to) {
  * `pnpm create astro` always leaves a config behind, so "skip if it exists"
  * silently produced a project where the integration was never registered —
  * Astro then served its own starter page and the theme appeared to do nothing.
-<<<<<<< HEAD
- * A config that does not mention the package is therefore replaced (the old one
- * is kept as a backup); a config that already wires the theme in is left alone.
- */
-=======
  * A config with no real import of the package is replaced (the old one is
  * kept as a backup). A recognizable static import or CommonJS require plus a
  * call in an inline `integrations` array is left alone; indirect wiring is
@@ -1137,7 +1071,6 @@ function astroConfigThemeStatus(source, packageName) {
 	return hasStaticCall || hasRequireCall ? "wired" : "uncertain";
 }
 
->>>>>>> upstream/main
 async function ensureAstroConfig(packageName, { force }) {
 	const present = ASTRO_CONFIG_FILENAMES.filter((name) =>
 		existsSync(join(CWD, name)),
@@ -1146,17 +1079,6 @@ async function ensureAstroConfig(packageName, { force }) {
 
 	for (const name of present) {
 		const current = await readFile(join(CWD, name), "utf8");
-<<<<<<< HEAD
-		const wired = current.includes(packageName) || current.includes("shirones");
-
-		if (wired && !force) {
-			log.skip(`${name} already wires the theme in`);
-			return;
-		}
-
-		const saved = await backup(name);
-		if (wired) {
-=======
 		const status = astroConfigThemeStatus(current, packageName);
 
 		if (status === "wired" && !force) {
@@ -1173,7 +1095,6 @@ async function ensureAstroConfig(packageName, { force }) {
 
 		const saved = await backup(name);
 		if (status === "wired") {
->>>>>>> upstream/main
 			log.ok(
 				`${name} already wires the theme in — replaced with the template (--force), kept a copy at ${saved}`,
 			);
@@ -1680,13 +1601,10 @@ async function init(args) {
 		return;
 	}
 
-<<<<<<< HEAD
-=======
 	// Validate user JSONC before any scaffold or backup changes, so a malformed
 	// config cannot leave the project half-initialised.
 	await validateExistingTsConfig();
 
->>>>>>> upstream/main
 	// Already initialised? Report drift from the template instead of
 	// re-scaffolding; `--update` repairs the safe bits (never overwrites the
 	// user's files).

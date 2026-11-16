@@ -1,10 +1,6 @@
 <script lang="ts">
 import Avatar from "@components/atoms/display/Avatar.svelte";
-<<<<<<< HEAD
-import Icon from "@iconify/svelte";
-=======
 import Icon from "@components/atoms/display/Icon.svelte";
->>>>>>> upstream/main
 import type { FriendItem } from "../../data/friends";
 
 let { friend }: { friend: FriendItem } = $props();
@@ -31,11 +27,8 @@ const host = $derived.by(() => {
 				alt=""
 				size={40}
 				shape="circle"
-<<<<<<< HEAD
-=======
 				loadingFeedback
 				fallback={friend.title.trim()[0]}
->>>>>>> upstream/main
 			/>
 
 			<div class="friend-card__info">

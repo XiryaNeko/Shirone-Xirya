@@ -23,8 +23,6 @@ export const zh_TW: Translation = {
 	[Key.momentsBanner]: "隨手記錄的碎碎念 —— 生活、折騰與一切小確幸。",
 	[Key.momentsCount]: "則動態",
 	[Key.momentsCounts]: "則動態",
-<<<<<<< HEAD
-=======
 	[Key.momentPasswordTitle]: "受保護的動態",
 	[Key.momentPasswordDescription]:
 		"此動態已加密保護，請輸入存取密碼以解鎖內容。",
@@ -35,7 +33,6 @@ export const zh_TW: Translation = {
 	[Key.momentPasswordInvalid]: "密碼錯誤，請重新輸入",
 	[Key.momentPasswordUnlock]: "解鎖動態",
 	[Key.momentPasswordUnlocking]: "正在解密…",
->>>>>>> upstream/main
 	[Key.pinned]: "置頂",
 	[Key.loadMore]: "載入更多",
 
@@ -278,10 +275,7 @@ export const zh_TW: Translation = {
 	[Key.paginationNext]: "下一頁",
 	[Key.paginationPage]: "第 {page} 頁",
 	[Key.paginationJump]: "跳轉到頁面",
-<<<<<<< HEAD
-=======
 	[Key.paginationLabel]: "分頁導覽",
->>>>>>> upstream/main
 	[Key.tagsViewAll]: "查看全部標籤",
 
 	[Key.author]: "作者",

@@ -24,8 +24,6 @@ export const es: Translation = {
 	[Key.momentsBanner]: "Notas cortas — vida, trabajo y pequeñas alegrías.",
 	[Key.momentsCount]: "momento",
 	[Key.momentsCounts]: "momentos",
-<<<<<<< HEAD
-=======
 	[Key.momentPasswordTitle]: "Momento protegido",
 	[Key.momentPasswordDescription]:
 		"Este momento está cifrado. Introduce la contraseña para desbloquear su contenido.",
@@ -36,7 +34,6 @@ export const es: Translation = {
 	[Key.momentPasswordInvalid]: "Contraseña incorrecta",
 	[Key.momentPasswordUnlock]: "Desbloquear momento",
 	[Key.momentPasswordUnlocking]: "Descifrando…",
->>>>>>> upstream/main
 	[Key.pinned]: "Fijado",
 	[Key.loadMore]: "Cargar más",
 
@@ -289,10 +286,7 @@ export const es: Translation = {
 	[Key.paginationNext]: "Página siguiente",
 	[Key.paginationPage]: "Página {page}",
 	[Key.paginationJump]: "Ir a la página",
-<<<<<<< HEAD
-=======
 	[Key.paginationLabel]: "Paginación",
->>>>>>> upstream/main
 	[Key.tagsViewAll]: "Ver todas las etiquetas",
 
 	[Key.author]: "Autor",

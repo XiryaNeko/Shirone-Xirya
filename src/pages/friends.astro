@@ -18,9 +18,6 @@ const pageDescription = resolveI18nText(
 ---
 
 <MainGridLayout title={pageTitle} description={pageDescription} page="friends">
-<<<<<<< HEAD
-    <FriendSection friends={getFriendsList()} title={pageTitle} subtitle={pageDescription} client:visible></FriendSection>
-=======
 	<FriendSection
 		friends={getFriendsList()}
 		title={pageTitle}
@@ -28,5 +25,4 @@ const pageDescription = resolveI18nText(
 		pageSize={friendsConfig.pageSize}
 		client:visible
 	/>
->>>>>>> upstream/main
 </MainGridLayout>
