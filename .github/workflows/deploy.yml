@@ -49,7 +49,7 @@ permissions:
 
 env:
   # TODO: 替换为你的内容仓。
-  CONTENT_REPOSITORY: OWNER/shirone-content
+  CONTENT_REPOSITORY: XiryaNeko/Shirone-Xirya-Content
   CONTENT_WORKING_COPY: .content-src
 
 jobs:
@@ -202,13 +202,13 @@ jobs:
       # 这种平台会自己 clone 代码仓并执行 `pnpm build`，因此需要在平台的环境变量里
       # 配置 CONTENT_REPO_URL（私有仓用 https://x-access-token:<TOKEN>@... 形式），
       # 由 content:sync 在平台侧拉取内容。此时本 workflow 只负责触发：
-      # - name: Trigger platform build
-      #   env:
-      #     DEPLOY_HOOK: ${{ secrets.DEPLOY_HOOK }}
-      #   run: |
-      #     set -euo pipefail
-      #     curl --fail-with-body --silent --show-error --retry 3 --retry-delay 2 \
-      #       --max-time 30 --request POST "$DEPLOY_HOOK"
+      - name: Trigger platform build
+        env:
+          DEPLOY_HOOK: ${{ secrets.DEPLOY_HOOK }}
+        run: |
+          set -euo pipefail
+          curl --fail-with-body --silent --show-error --retry 3 --retry-delay 2 \
+            --max-time 30 --request POST "$DEPLOY_HOOK"
 
       - name: Summarize
         if: always()
